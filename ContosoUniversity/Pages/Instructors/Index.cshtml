@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Instructors";
     string SelectedInstructorName = "";
+    string SelectedCourseName = "";
 }
 
 <h1>Instructors</h1>
@@ -82,7 +83,8 @@
             string selectedRow = "";
             if (item.CourseID == Model.CourseID)
             {
-                selectedRow = "success";
+                selectedRow = "success ltpe";
+                SelectedCourseName = item.Title;
             }
             <tr class="@selectedRow">
                 <td>
@@ -100,5 +102,29 @@
             </tr>
         }
 
+    </table>
+}
+
+@if (Model.Instructor.Enrollments != null)
+{
+    <h3>
+        Students Enrolled in Selected Course : @SelectedCourseName
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Grade</th>
+        </tr>
+        @foreach (var item in Model.Instructor.Enrollments)
+        {
+            <tr>
+                <td>
+                    @item.Student.FullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+            </tr>
+        }
     </table>
 }

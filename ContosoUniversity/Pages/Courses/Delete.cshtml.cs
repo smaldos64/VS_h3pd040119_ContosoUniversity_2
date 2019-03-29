@@ -28,8 +28,13 @@ namespace ContosoUniversity.Pages.Courses
                 return NotFound();
             }
 
+            //Course = await _context.Course
+            //    .Include(c => c.Department).FirstOrDefaultAsync(m => m.CourseID == id);
+
             Course = await _context.Course
-                .Include(c => c.Department).FirstOrDefaultAsync(m => m.CourseID == id);
+            .AsNoTracking()
+            .Include(c => c.Department)
+            .FirstOrDefaultAsync(m => m.CourseID == id);
 
             if (Course == null)
             {
@@ -45,7 +50,11 @@ namespace ContosoUniversity.Pages.Courses
                 return NotFound();
             }
 
-            Course = await _context.Course.FindAsync(id);
+            //Course = await _context.Course.FindAsync(id);
+
+            Course = await _context.Course
+            .AsNoTracking()
+            .FirstOrDefaultAsync(m => m.CourseID == id);
 
             if (Course != null)
             {
