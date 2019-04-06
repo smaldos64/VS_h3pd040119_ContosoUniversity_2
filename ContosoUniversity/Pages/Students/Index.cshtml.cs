@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
 using ContosoUniversity.Tools;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ContosoUniversity.Pages.Students
 {
@@ -26,6 +27,12 @@ namespace ContosoUniversity.Pages.Students
         public string DateSort { get; set; }
         public string CurrentFilter { get; set; }
         public string CurrentSort { get; set; }
+
+        // LTPE below
+        public int pageSize { get; set; }
+        //public List<int> PageSizesAvailable { get; set; }
+
+        public SelectList PageSizesAvailable { get; set; }
 
         //public async Task OnGetAsync()
         //{
@@ -93,8 +100,14 @@ namespace ContosoUniversity.Pages.Students
         //    Student = await studentIQ.AsNoTracking().ToListAsync();
         //}
 
-        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
+        //public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex)
+        public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex, int? pageSize)
         {
+            // LTPE added below
+            List<int> PageSizes = new List<int>();
+            pageSize = (pageSize == null) ? 3 : pageSize;
+            int pageSizeHere = (int)pageSize;
+
             CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             DateSort = sortOrder == "Date" ? "date_desc" : "Date";
@@ -111,6 +124,15 @@ namespace ContosoUniversity.Pages.Students
 
             IQueryable<Student> studentIQ = from s in _context.Student
                                             select s;
+
+            // LTPE added code below.
+            for (int Counter = 0; Counter < studentIQ.Count(); Counter++)
+            {
+                PageSizes.Add(Counter + 1);
+            }
+            PageSizesAvailable = new SelectList(PageSizes,
+                        "DepartmentID", "Name", (object)pageSize);
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 studentIQ = studentIQ.Where(s => s.LastName.Contains(searchString)
@@ -132,9 +154,13 @@ namespace ContosoUniversity.Pages.Students
                     break;
             }
 
-            int pageSize = 3;
+            // LTPE removed below.
+            //int pageSize = 3;
+            //Student = await PaginatedList<Student>.CreateAsync(
+            //    studentIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
+
             Student = await PaginatedList<Student>.CreateAsync(
-                studentIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
+                studentIQ.AsNoTracking(), pageIndex ?? 1, pageSizeHere);
         }
     }
 }

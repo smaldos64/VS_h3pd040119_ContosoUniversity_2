@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    int NumberOfElemets = Model.Student.Count;
 }
 
 <h1>Index</h1>
@@ -93,3 +94,13 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+
+<br />
+<br />
+<select asp-for="@Model.pageSize" class="form-control" asp-items="@Model.PageSizesAvailable">
+</select>
+
+@*<select asp-for="Course.DepartmentID" class="form-control"
+            asp-items="@Model.DepartmentNameSL">
+        <option value="">-- Select Department --</option>
+    </select>*@

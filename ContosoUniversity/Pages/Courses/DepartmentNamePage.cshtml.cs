@@ -35,6 +35,9 @@ namespace ContosoUniversity.Pages.Courses
 
             DepartmentNameSL = new SelectList(departmentsQuery.AsNoTracking(),
                         "DepartmentID", "Name", selectedDepartment);
+            // Navne skal være DepartmentID og Name , ellers kommer der en runtime fejl => Object reference not set to an instance of an object !!!
+            // DepartmentID henviser til DepartmentID i Department klassen
+            // Name henviser til Name i Department klassen
         }
     }
 }
