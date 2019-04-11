@@ -16,7 +16,7 @@
     <div class="form-actions no-color">
         <p>
             Find by name:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" id="SearchString" />
             <input type="submit" value="Search" class="btn btn-default" /> |
             <a asp-page="./Index">Back to full List</a>
         </p>
@@ -97,10 +97,37 @@
 
 <br />
 <br />
-<select asp-for="@Model.pageSize" class="form-control" asp-items="@Model.PageSizesAvailable">
+<select asp-for="@Model.pageSize" class="form-control" asp-items="@Model.PageSizesAvailable" id="StudentDropDownList">
 </select>
 
-@*<select asp-for="Course.DepartmentID" class="form-control"
-            asp-items="@Model.DepartmentNameSL">
-        <option value="">-- Select Department --</option>
-    </select>*@
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#StudentDropDownList").change(function () {
+            var sortOrder = '@Model.CurrentSort';
+            var currentFilter = '@Model.CurrentFilter';
+            var searchString = $("#SearchString").val();
+            var pageIndex = '@Model.Student.PageIndex';
+            var pageSize = $("#StudentDropDownList").val();
+
+            @*var ServerSideModel = @Html.Raw(Json.Model);*@
+            @*window.location.href = '@Url.Action("Index", "Student", new {
+                                   sortOrder = @Model.CurrentSort,
+                                   currentFilter = @Model.CurrentFilter,
+                                   searchString = "Lars",
+                                   pageIndex = @Model.Student.PageIndex,
+                                   pageSize = 2})';*@
+            window.location.href = '@Url.Action("Index", "Student", new {
+                                   sortOrder = @Model.CurrentSort})' + "/" +
+                                   "@Model.CurrentFilter" + "/" +
+                                   searchString + "/" +
+                                   @Model.Student.PageIndex + "/" +
+                                   pageSize;
+        });
+        @*window.location = "/Students/Index/" + IngredientID
+        window.location.href = '@Url.Action("Index", "Student", new { })';*@
+
+    });
+
+</script>

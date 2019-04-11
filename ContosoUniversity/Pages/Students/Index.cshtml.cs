@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using ContosoUniversity.ViewModels;
 using ContosoUniversity.Tools;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -104,7 +105,8 @@ namespace ContosoUniversity.Pages.Students
         public async Task OnGetAsync(string sortOrder, string currentFilter, string searchString, int? pageIndex, int? pageSize)
         {
             // LTPE added below
-            List<int> PageSizes = new List<int>();
+            List<PagingOnPage> PagingOnPageList = new List<PagingOnPage>();
+            //List<int> PageSizes = new List<int>();
             pageSize = (pageSize == null) ? 3 : pageSize;
             int pageSizeHere = (int)pageSize;
 
@@ -128,10 +130,10 @@ namespace ContosoUniversity.Pages.Students
             // LTPE added code below.
             for (int Counter = 0; Counter < studentIQ.Count(); Counter++)
             {
-                PageSizes.Add(Counter + 1);
+                PagingOnPageList.Add(new PagingOnPage((Counter + 1), (Counter + 1).ToString()));
             }
-            PageSizesAvailable = new SelectList(PageSizes,
-                        "DepartmentID", "Name", (object)pageSize);
+            PageSizesAvailable = new SelectList(PagingOnPageList,
+                        "ElementsOnPage", "ElementsOnPageString", (object)pageSize);
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -159,6 +161,7 @@ namespace ContosoUniversity.Pages.Students
             //Student = await PaginatedList<Student>.CreateAsync(
             //    studentIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
 
+            // LTPE added below
             Student = await PaginatedList<Student>.CreateAsync(
                 studentIQ.AsNoTracking(), pageIndex ?? 1, pageSizeHere);
         }
