@@ -12,122 +12,109 @@
     <a asp-page="Create">Create New</a>
 </p>
 
-<form asp-page="./Index" method="get">
+<form asp-page="./Index" method="get" id="PagingForm">
     <div class="form-actions no-color">
         <p>
             Find by name:
             <input type="text" name="SearchString" value="@Model.CurrentFilter" id="SearchString" />
             <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-page="./Index">Back to full List</a>
+            <a asp-page="./Index" asp-route-pageSize="@Model.PageSize">Back to full List</a>
         </p>
     </div>
-</form>
+    @*</form>*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
-                   asp-route-currentFilter="@Model.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Student[0].LastName)
-                </a>
-                @*<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
-                        @Html.DisplayNameFor(model => model.Student[0].LastName)
-                    </a>*@
-                @*@Html.DisplayNameFor(model => model.Student[0].LastName)*@
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student[0].FirstMidName)
-            </th>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
-                   asp-route-currentFilter="@Model.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)
-                </a>
-                @*<a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
-                        @Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)
-                    </a>*@
-                @*@Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)*@
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Student)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstMidName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EnrollmentDate)
-                </td>
-                <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-                </td>
+                <th>
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                       asp-route-currentFilter="@Model.CurrentFilter" asp-route-pageSize="@Model.PageSize">
+                        @Html.DisplayNameFor(model => model.Student[0].LastName)
+                    </a>
+                    @*<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                            @Html.DisplayNameFor(model => model.Student[0].LastName)
+                        </a>*@
+                    @*@Html.DisplayNameFor(model => model.Student[0].LastName)*@
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Student[0].FirstMidName)
+                </th>
+                <th>
+                    <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
+                       asp-route-currentFilter="@Model.CurrentFilter" asp-route-pageSize="@Model.PageSize">
+                        @Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)
+                    </a>
+                    @*<a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
+                            @Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)
+                        </a>*@
+                    @*@Html.DisplayNameFor(model => model.Student[0].EnrollmentDate)*@
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Student)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstMidName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EnrollmentDate)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-@{
-    var prevDisabled = !Model.Student.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Student.HasNextPage ? "disabled" : "";
-}
+    @{
+        var prevDisabled = !Model.Student.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Student.HasNextPage ? "disabled" : "";
+    }
 
-<a asp-page="./Index"
-   asp-route-sortOrder="@Model.CurrentSort"
-   asp-route-pageIndex="@(Model.Student.PageIndex - 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @prevDisabled">
-    Previous
-</a>
-<a asp-page="./Index"
-   asp-route-sortOrder="@Model.CurrentSort"
-   asp-route-pageIndex="@(Model.Student.PageIndex + 1)"
-   asp-route-currentFilter="@Model.CurrentFilter"
-   class="btn btn-default @nextDisabled">
-    Next
-</a>
+    <a asp-page="./Index"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Student.PageIndex - 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-pageSize="@Model.PageSize"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-page="./Index"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Student.PageIndex + 1)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-pageSize="@Model.PageSize"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 
-<br />
-<br />
-<select asp-for="@Model.pageSize" class="form-control" asp-items="@Model.PageSizesAvailable" id="StudentDropDownList">
-</select>
-
+    <br />
+    <br />
+    <input id="hdn1" type="hidden" name="sortOrder" asp-for="CurrentSort" />
+    <input id="hdn2" type="hidden" name="currentFilter" asp-for="CurrentFilter" />
+    <input id="hdnPageIndex" type="hidden" name="pageIndex" value="1" />
+    <input id="hdnPageSize" type="hidden" name="pageSize" value="3" />
+    <select asp-for="PageSize" class="form-control col-md-2" asp-items="@Model.PageSizesAvailable" id="StudentDropDownList"></select>
+</form>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     $(document).ready(function () {
+        $("#hdnPageSize").val(@Model.PageSize);
+        
         $("#StudentDropDownList").change(function () {
-            var sortOrder = '@Model.CurrentSort';
-            var currentFilter = '@Model.CurrentFilter';
-            var searchString = $("#SearchString").val();
-            var pageIndex = '@Model.Student.PageIndex';
-            var pageSize = $("#StudentDropDownList").val();
-
-            @*var ServerSideModel = @Html.Raw(Json.Model);*@
-            @*window.location.href = '@Url.Action("Index", "Student", new {
-                                   sortOrder = @Model.CurrentSort,
-                                   currentFilter = @Model.CurrentFilter,
-                                   searchString = "Lars",
-                                   pageIndex = @Model.Student.PageIndex,
-                                   pageSize = 2})';*@
-            window.location.href = '@Url.Action("Index", "Student", new {
-                                   sortOrder = @Model.CurrentSort})' + "/" +
-                                   "@Model.CurrentFilter" + "/" +
-                                   searchString + "/" +
-                                   @Model.Student.PageIndex + "/" +
-                                   pageSize;
+            $("#hdnPageSize").val($("#StudentDropDownList").val());
+            $("#PagingForm").submit();
         });
-        @*window.location = "/Students/Index/" + IngredientID
-        window.location.href = '@Url.Action("Index", "Student", new { })';*@
-
     });
 
 </script>

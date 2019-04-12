@@ -30,7 +30,7 @@ namespace ContosoUniversity.Pages.Students
         public string CurrentSort { get; set; }
 
         // LTPE below
-        public int pageSize { get; set; }
+        public int PageSize { get; set; } = 3;
         //public List<int> PageSizesAvailable { get; set; }
 
         public SelectList PageSizesAvailable { get; set; }
@@ -106,9 +106,10 @@ namespace ContosoUniversity.Pages.Students
         {
             // LTPE added below
             List<PagingOnPage> PagingOnPageList = new List<PagingOnPage>();
-            //List<int> PageSizes = new List<int>();
-            pageSize = (pageSize == null) ? 3 : pageSize;
-            int pageSizeHere = (int)pageSize;
+            if (null != pageSize)
+            {
+                PageSize = (int)pageSize;
+            }
 
             CurrentSort = sortOrder;
             NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -126,6 +127,12 @@ namespace ContosoUniversity.Pages.Students
 
             IQueryable<Student> studentIQ = from s in _context.Student
                                             select s;
+            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                studentIQ = studentIQ.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString));
+            }
 
             // LTPE added code below.
             for (int Counter = 0; Counter < studentIQ.Count(); Counter++)
@@ -133,13 +140,8 @@ namespace ContosoUniversity.Pages.Students
                 PagingOnPageList.Add(new PagingOnPage((Counter + 1), (Counter + 1).ToString()));
             }
             PageSizesAvailable = new SelectList(PagingOnPageList,
-                        "ElementsOnPage", "ElementsOnPageString", (object)pageSize);
+                        "ElementsOnPage", "ElementsOnPageString", (object)PageSize);
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                studentIQ = studentIQ.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
-            }
             switch (sortOrder)
             {
                 case "name_desc":
@@ -163,7 +165,7 @@ namespace ContosoUniversity.Pages.Students
 
             // LTPE added below
             Student = await PaginatedList<Student>.CreateAsync(
-                studentIQ.AsNoTracking(), pageIndex ?? 1, pageSizeHere);
+                studentIQ.AsNoTracking(), pageIndex ?? 1, PageSize);
         }
     }
 }
