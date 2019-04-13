@@ -82,6 +82,14 @@
 
     <a asp-page="./Index"
        asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="1"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-pageSize="@Model.PageSize"
+       class="btn btn-default @prevDisabled">
+        First
+    </a>
+    <a asp-page="./Index"
+       asp-route-sortOrder="@Model.CurrentSort"
        asp-route-pageIndex="@(Model.Student.PageIndex - 1)"
        asp-route-currentFilter="@Model.CurrentFilter"
        asp-route-pageSize="@Model.PageSize"
@@ -96,8 +104,20 @@
        class="btn btn-default @nextDisabled">
         Next
     </a>
+    <a asp-page="./Index"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-pageIndex="@(Model.Student.TotalPages)"
+       asp-route-currentFilter="@Model.CurrentFilter"
+       asp-route-pageSize="@Model.PageSize"
+       class="btn btn-default @nextDisabled">
+        Last
+    </a>
 
     <br />
+    <br />
+    <label asp-for="NumberOfElementsOverall">Antal Studerende i Listen : @Model.NumberOfElementsOverall</label>
+    <br />
+    <label>Antal Studerende i Listen : @Model.NumberOfElementsOverall</label>
     <br />
     <input id="hdn1" type="hidden" name="sortOrder" asp-for="CurrentSort" />
     <input id="hdn2" type="hidden" name="currentFilter" asp-for="CurrentFilter" />

@@ -35,6 +35,8 @@ namespace ContosoUniversity.Pages.Students
 
         public SelectList PageSizesAvailable { get; set; }
 
+        public int NumberOfElementsOverall { get; set; }
+
         //public async Task OnGetAsync()
         //{
         //    Student = await _context.Student.ToListAsync();
@@ -141,6 +143,8 @@ namespace ContosoUniversity.Pages.Students
             }
             PageSizesAvailable = new SelectList(PagingOnPageList,
                         "ElementsOnPage", "ElementsOnPageString", (object)PageSize);
+
+            NumberOfElementsOverall = studentIQ.Count();
 
             switch (sortOrder)
             {
